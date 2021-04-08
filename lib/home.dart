@@ -9,6 +9,8 @@ class _HomeState extends State<Home> {
   TextEditingController weightController = TextEditingController();
   TextEditingController heightController = TextEditingController();
 
+  GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+
   String _infoText = "Informe seus dados";
 
   void _resetFields() {
@@ -63,56 +65,65 @@ class _HomeState extends State<Home> {
       backgroundColor: Colors.white,
       body: SingleChildScrollView(
         padding: EdgeInsets.fromLTRB(10.0, 0.0, 10.0, 0.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: [
-            Icon(
-              Icons.person_outline,
-              size: 120.0,
-              color: Colors.blueAccent,
-            ),
-            TextField(
-              keyboardType: TextInputType.number,
-              decoration: InputDecoration(
-                labelText: "Peso (kg)",
-                labelStyle: TextStyle(color: Colors.blueAccent),
+        child: Form(
+          key: _formKey,
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              Icon(
+                Icons.person_outline,
+                size: 120.0,
+                color: Colors.blueAccent,
               ),
-              textAlign: TextAlign.center,
-              style: TextStyle(color: Colors.blueAccent, fontSize: 24.0),
-              controller: weightController,
-            ),
-            TextField(
-              keyboardType: TextInputType.number,
-              decoration: InputDecoration(
-                labelText: "Altura (cm)",
-                labelStyle: TextStyle(color: Colors.blueAccent),
+              TextFormField(
+                keyboardType: TextInputType.number,
+                decoration: InputDecoration(
+                  labelText: "Peso (kg)",
+                  labelStyle: TextStyle(color: Colors.blueAccent),
+                ),
+                textAlign: TextAlign.center,
+                style: TextStyle(color: Colors.blueAccent, fontSize: 24.0),
+                controller: weightController,
+                validator: (value) => (value.isEmpty)? "Insira seu peso": null,
               ),
-              textAlign: TextAlign.center,
-              style: TextStyle(color: Colors.blueAccent, fontSize: 24.0),
-              controller: heightController,
-            ),
-            Padding(
-              padding: const EdgeInsets.only(top: 10.0, bottom: 10.0),
-              child: Container(
-                height: 50.0,
-                child: ElevatedButton(
-                  onPressed: () => _calculate(),
-                  child: Text(
-                    "Calcular",
-                    style: TextStyle(color: Colors.white),
+              TextFormField(
+                keyboardType: TextInputType.number,
+                decoration: InputDecoration(
+                  labelText: "Altura (cm)",
+                  labelStyle: TextStyle(color: Colors.blueAccent),
+                ),
+                textAlign: TextAlign.center,
+                style: TextStyle(color: Colors.blueAccent, fontSize: 24.0),
+                controller: heightController,
+                validator: (value) => (value.isEmpty)? "Insira sua altura": null,
+              ),
+              Padding(
+                padding: const EdgeInsets.only(top: 10.0, bottom: 10.0),
+                child: Container(
+                  height: 50.0,
+                  child: ElevatedButton(
+                    onPressed: () {
+                      if (_formKey.currentState.validate()) {
+                        _calculate();
+                      }
+                    },
+                    child: Text(
+                      "Calcular",
+                      style: TextStyle(color: Colors.white),
+                    ),
+                    style: ElevatedButton.styleFrom(
+                        primary: Colors.blueAccent,
+                        textStyle: TextStyle(fontSize: 24.0)),
                   ),
-                  style: ElevatedButton.styleFrom(
-                      primary: Colors.blueAccent,
-                      textStyle: TextStyle(fontSize: 24.0)),
                 ),
               ),
-            ),
-            Text(
-              _infoText,
-              textAlign: TextAlign.center,
-              style: TextStyle(color: Colors.blueAccent, fontSize: 24.0),
-            )
-          ],
+              Text(
+                _infoText,
+                textAlign: TextAlign.center,
+                style: TextStyle(color: Colors.blueAccent, fontSize: 24.0),
+              )
+            ],
+          ),
         ),
       ),
     );
